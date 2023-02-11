@@ -2,26 +2,44 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const hbs = require('express-handlebars');
 const {configuratorRouter} = require('./routes/configurator');
-const {homeRouter} = require('./routes/home');
+const {HomeRouter} = require('./routes/home');
 const {orderRouter} = require('./routes/order');
 const {handlebarsHelpers} = require("./utils/handlebars-helpers");
 
-const app = express();
 
-app.use(express.json());
-app.use(express.static('public')); // http:/localhost:3000/ app starts in folder public
-app.use(cookieParser());
-app.engine('.hbs', hbs.engine({
-    extname: '.hbs',
-    helpers: handlebarsHelpers,
-}));
-app.set('view engine', '.hbs');
+class cookieMakerApp {
+    constructor() {
+        this._configureApp();
+        this._setRoutes();
+        this._run();
+    }
 
-app.use('/', homeRouter);
-app.use('/configurator', configuratorRouter);
-app.use('/order', orderRouter);
+    _configureApp() {
+        this.app = express();
+        this.app.use(express.json());
+        this.app.use(express.static('public')); // http:/localhost:3000/ app starts in folder public
+        this.app.use(cookieParser());
+        this.app.engine('.hbs', hbs.engine({
+            extname: '.hbs',
+            helpers: handlebarsHelpers,
+        }));
+        this.app.set('view engine', '.hbs');
+    }
 
-app.listen(3000, 'localhost', () => {
-    console.log(`Listening on http://localhost:3000`);
-});
+    _setRoutes() {
 
+        this.app.use('/', new HomeRouter());
+        this.app.use('/configurator', configuratorRouter);
+        this.app.use('/order', orderRouter);
+
+    }
+
+    _run() {
+        this.app.listen(3000, 'localhost', () => {
+            console.log(`Listening on http://localhost:3000`);
+        });
+    }
+
+}
+
+new cookieMakerApp()
