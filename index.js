@@ -9,7 +9,7 @@ const {handlebarsHelpers} = require("./utils/handlebars-helpers");
 const app = express();
 
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static('public')); // http:/localhost:3000/ app starts in folder public
 app.use(cookieParser());
 app.engine('.hbs', hbs.engine({
     extname: '.hbs',
@@ -21,5 +21,7 @@ app.use('/', homeRouter);
 app.use('/configurator', configuratorRouter);
 app.use('/order', orderRouter);
 
-app.listen(3000, 'localhost');
+app.listen(3000, 'localhost', () => {
+    console.log(`Listening on http://localhost:3000`);
+});
 

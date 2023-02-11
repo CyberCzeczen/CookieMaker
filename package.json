@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx nodemon index.js",
     "start:prod": "npm index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "audit": "npm audit"
   },
   "keywords": [],
   "author": "",
